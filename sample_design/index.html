@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clova Note - 클로바노트</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- 헤더 -->
+    <header class="header">
+        <div class="header-left">
+            <button class="menu-btn" id="menuBtn">
+                <i class="fas fa-bars"></i>
+            </button>
+            <div class="logo">
+                <i class="fas fa-note-sticky"></i>
+                <span>Clova Note</span>
+            </div>
+        </div>
+        <div class="header-center">
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" placeholder="노트 검색">
+            </div>
+        </div>
+        <div class="header-right">
+            <button class="header-btn" title="설정">
+                <i class="fas fa-cog"></i>
+            </button>
+            <button class="header-btn" title="알림">
+                <i class="fas fa-bell"></i>
+            </button>
+            <button class="header-btn user-btn">
+                <i class="fas fa-user-circle"></i>
+            </button>
+        </div>
+    </header>
+
+    <div class="main-container">
+        <!-- 사이드바 -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <button class="new-note-btn" id="newNoteBtn">
+                    <i class="fas fa-plus"></i>
+                    <span>새 노트</span>
+                </button>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active">
+                    <i class="fas fa-sticky-note"></i>
+                    <span>모든 노트</span>
+                    <span class="count">0</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-star"></i>
+                    <span>즐겨찾기</span>
+                    <span class="count">0</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-microphone"></i>
+                    <span>녹음 노트</span>
+                    <span class="count">0</span>
+                </a>
+                <a href="#" class="nav-item">
+                    <i class="fas fa-trash"></i>
+                    <span>휴지통</span>
+                    <span class="count">0</span>
+                </a>
+            </nav>
+
+            <div class="sidebar-section">
+                <div class="section-header">
+                    <span>폴더</span>
+                    <button class="icon-btn">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+                <div class="folder-list">
+                    <div class="folder-item">
+                        <i class="fas fa-folder"></i>
+                        <span>업무</span>
+                    </div>
+                    <div class="folder-item">
+                        <i class="fas fa-folder"></i>
+                        <span>개인</span>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- 노트 리스트 -->
+        <div class="note-list-container">
+            <div class="note-list-header">
+                <h2>모든 노트</h2>
+                <div class="view-options">
+                    <button class="view-btn active" data-view="grid">
+                        <i class="fas fa-th"></i>
+                    </button>
+                    <button class="view-btn" data-view="list">
+                        <i class="fas fa-list"></i>
+                    </button>
+                    <select class="sort-select">
+                        <option>최근 수정순</option>
+                        <option>생성일순</option>
+                        <option>제목순</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="note-list" id="noteList">
+                <!-- 노트 카드 샘플 -->
+                <div class="note-card" data-note-id="1">
+                    <div class="note-card-header">
+                        <h3 class="note-title">환영합니다!</h3>
+                        <button class="note-menu-btn">
+                            <i class="fas fa-ellipsis-h"></i>
+                        </button>
+                    </div>
+                    <p class="note-preview">클로바노트에 오신 것을 환영합니다. 새 노트를 작성하거나 음성을 녹음해보세요.</p>
+                    <div class="note-card-footer">
+                        <span class="note-date">방금 전</span>
+                        <div class="note-tags">
+                            <span class="tag">시작하기</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 에디터 영역 -->
+        <div class="editor-container" id="editorContainer">
+            <div class="editor-header">
+                <div class="editor-tabs">
+                    <button class="editor-tab active" data-tab="write">
+                        <i class="fas fa-pen"></i>
+                        <span>작성</span>
+                    </button>
+                    <button class="editor-tab" data-tab="record">
+                        <i class="fas fa-microphone"></i>
+                        <span>녹음</span>
+                    </button>
+                    <button class="editor-tab" data-tab="summary">
+                        <i class="fas fa-file-alt"></i>
+                        <span>요약</span>
+                    </button>
+                </div>
+                <div class="editor-actions">
+                    <button class="editor-action-btn" title="즐겨찾기">
+                        <i class="far fa-star"></i>
+                    </button>
+                    <button class="editor-action-btn" title="공유">
+                        <i class="fas fa-share-alt"></i>
+                    </button>
+                    <button class="editor-action-btn" title="더보기">
+                        <i class="fas fa-ellipsis-v"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 작성 탭 -->
+            <div class="editor-content active" data-content="write">
+                <input type="text" class="note-title-input" placeholder="제목 없음" value="환영합니다!">
+                <div class="editor-toolbar">
+                    <button class="toolbar-btn" title="굵게">
+                        <i class="fas fa-bold"></i>
+                    </button>
+                    <button class="toolbar-btn" title="기울임">
+                        <i class="fas fa-italic"></i>
+                    </button>
+                    <button class="toolbar-btn" title="밑줄">
+                        <i class="fas fa-underline"></i>
+                    </button>
+                    <div class="toolbar-divider"></div>
+                    <button class="toolbar-btn" title="글머리 기호">
+                        <i class="fas fa-list-ul"></i>
+                    </button>
+                    <button class="toolbar-btn" title="번호 매기기">
+                        <i class="fas fa-list-ol"></i>
+                    </button>
+                    <button class="toolbar-btn" title="체크리스트">
+                        <i class="fas fa-check-square"></i>
+                    </button>
+                    <div class="toolbar-divider"></div>
+                    <button class="toolbar-btn" title="이미지">
+                        <i class="fas fa-image"></i>
+                    </button>
+                    <button class="toolbar-btn" title="링크">
+                        <i class="fas fa-link"></i>
+                    </button>
+                    <button class="toolbar-btn" title="코드">
+                        <i class="fas fa-code"></i>
+                    </button>
+                </div>
+                <div class="editor-area" contenteditable="true">
+                    <p>클로바노트에 오신 것을 환영합니다. 새 노트를 작성하거나 음성을 녹음해보세요.</p>
+                    <p><br></p>
+                    <p><strong>주요 기능:</strong></p>
+                    <ul>
+                        <li>텍스트 노트 작성</li>
+                        <li>음성 녹음 및 텍스트 변환</li>
+                        <li>자동 요약 기능</li>
+                        <li>폴더 및 태그 관리</li>
+                    </ul>
+                </div>
+                <div class="editor-info">
+                    <span class="char-count">문자 수: 124</span>
+                    <span class="last-saved">저장됨 · 방금 전</span>
+                </div>
+            </div>
+
+            <!-- 녹음 탭 -->
+            <div class="editor-content" data-content="record">
+                <div class="record-section">
+                    <div class="record-visualizer">
+                        <div class="record-icon">
+                            <i class="fas fa-microphone"></i>
+                        </div>
+                        <div class="record-status">녹음 준비</div>
+                        <div class="record-time">00:00:00</div>
+                    </div>
+                    <div class="record-controls">
+                        <button class="record-btn start-record" id="recordBtn">
+                            <i class="fas fa-circle"></i>
+                            <span>녹음 시작</span>
+                        </button>
+                        <button class="record-btn pause-record" style="display: none;">
+                            <i class="fas fa-pause"></i>
+                            <span>일시정지</span>
+                        </button>
+                        <button class="record-btn stop-record" style="display: none;">
+                            <i class="fas fa-stop"></i>
+                            <span>녹음 완료</span>
+                        </button>
+                    </div>
+                    <div class="record-transcript">
+                        <h4>변환된 텍스트</h4>
+                        <div class="transcript-content">
+                            녹음을 시작하면 음성이 자동으로 텍스트로 변환됩니다.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 요약 탭 -->
+            <div class="editor-content" data-content="summary">
+                <div class="summary-section">
+                    <div class="summary-header">
+                        <h3>AI 요약</h3>
+                        <button class="generate-summary-btn">
+                            <i class="fas fa-magic"></i>
+                            <span>요약 생성</span>
+                        </button>
+                    </div>
+                    <div class="summary-content">
+                        <div class="summary-placeholder">
+                            <i class="fas fa-file-alt"></i>
+                            <p>노트 내용을 AI가 자동으로 요약해드립니다.</p>
+                            <p class="summary-hint">요약 생성 버튼을 클릭하세요.</p>
+                        </div>
+                    </div>
+                    <div class="summary-keywords">
+                        <h4>키워드</h4>
+                        <div class="keyword-list">
+                            <!-- 키워드 태그들 -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 컨텍스트 메뉴 -->
+    <div class="context-menu" id="contextMenu" style="display: none;">
+        <div class="context-menu-item">
+            <i class="fas fa-edit"></i>
+            <span>이름 변경</span>
+        </div>
+        <div class="context-menu-item">
+            <i class="fas fa-star"></i>
+            <span>즐겨찾기</span>
+        </div>
+        <div class="context-menu-item">
+            <i class="fas fa-folder"></i>
+            <span>폴더로 이동</span>
+        </div>
+        <div class="context-menu-divider"></div>
+        <div class="context-menu-item danger">
+            <i class="fas fa-trash"></i>
+            <span>삭제</span>
+        </div>
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

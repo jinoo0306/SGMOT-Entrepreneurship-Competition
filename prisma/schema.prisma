@@ -1,0 +1,91 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id               String            @id @default(cuid())
+  email            String            @unique
+  name             String?
+  passwordHash     String?
+  image            String?
+  notes            Note[]
+  tags             Tag[]
+  folders          Folder[]
+  transcriptionJobs TranscriptionJob[]
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+}
+
+model Note {
+  id                String            @id @default(cuid())
+  userId            String
+  user              User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  title             String
+  content           String            @default("")
+  summary           String?
+  isFavorite        Boolean           @default(false)
+  folderId          String?
+  folder            Folder?           @relation(fields: [folderId], references: [id], onDelete: SetNull)
+  tags              NoteTag[]
+  shared            Boolean           @default(false)
+  sharedSlug        String?           @unique
+  audioUrl          String?
+  duration          Int?              // 오디오 길이 (초)
+  transcriptionJobs TranscriptionJob[]
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+}
+
+model Tag {
+  id     String    @id @default(cuid())
+  userId String
+  user   User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name   String
+  color  String    @default("#2F80ED")
+  notes  NoteTag[]
+
+  @@unique([userId, name])
+}
+
+model NoteTag {
+  noteId String
+  tagId  String
+  note   Note   @relation(fields: [noteId], references: [id], onDelete: Cascade)
+  tag    Tag    @relation(fields: [tagId], references: [id], onDelete: Cascade)
+
+  @@id([noteId, tagId])
+}
+
+model Folder {
+  id     String @id @default(cuid())
+  userId String
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name   String
+  notes  Note[]
+
+  @@unique([userId, name])
+}
+
+model TranscriptionJob {
+  id         String    @id @default(cuid())
+  userId     String
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  noteId     String?
+  note       Note?     @relation(fields: [noteId], references: [id], onDelete: SetNull)
+  status     String    @default("PENDING") // PENDING, PROCESSING, SUCCEEDED, FAILED
+  sourceType String    // "upload" | "record"
+  audioUrl   String
+  language   String    @default("ko")
+  result     String?   // 전사 결과 텍스트
+  error      String?
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+}
