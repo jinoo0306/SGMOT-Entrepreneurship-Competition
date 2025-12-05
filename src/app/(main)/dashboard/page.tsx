@@ -417,57 +417,75 @@ export default function DashboardPage() {
     return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`
   }
 
-  // Generate summary
+  // Generate summary (SOAP Format)
   const generateSummary = () => {
     if (!currentNote) return
     
-    const doctorName = currentNote.speakers.find(s => s.id === 'doctor')?.name || '의료진'
-    const patientName = currentNote.speakers.find(s => s.id === 'patient')?.name || '환자'
-    
     setSummaryContent(`
-      <h4 style="margin-bottom: 16px; color: var(--primary-color);">📋 진료 요약</h4>
-      
-      <div style="margin-bottom: 20px;">
-        <h5 style="margin-bottom: 8px;">👤 참석자</h5>
-        <p style="margin-left: 16px;">${currentNote.speakers.map(s => s.name).join(', ')}</p>
-      </div>
-      
-      <div style="margin-bottom: 20px;">
-        <h5 style="margin-bottom: 8px;">🩺 주요 증상</h5>
-        <ul style="margin-left: 24px;">
-          <li>오른쪽 무릎 통증</li>
-          <li>계단 오르내릴 때 심한 통증</li>
-          <li>앉았다 일어날 때 관절에서 소리 발생</li>
-          <li>최근 등산 후 증상 악화</li>
-        </ul>
-      </div>
-      
-      <div style="margin-bottom: 20px;">
-        <h5 style="margin-bottom: 8px;">💊 진단 및 처방</h5>
-        <ul style="margin-left: 24px;">
-          <li>추정 진단: 퇴행성 관절염 초기 또는 슬개건염</li>
-          <li>X-ray 검사 필요</li>
-          <li>소염제 처방 (1주일)</li>
-          <li>물리치료 권장 (주 2-3회, 2-3주)</li>
-        </ul>
-      </div>
-      
-      <div style="margin-bottom: 20px;">
-        <h5 style="margin-bottom: 8px;">📌 주의사항</h5>
-        <ul style="margin-left: 24px;">
-          <li>당분간 등산 자제</li>
-          <li>허벅지 앞쪽 근육 스트레칭 권장</li>
-          <li>햄스트링 스트레칭 권장</li>
-        </ul>
-      </div>
-      
-      <div>
-        <h5 style="margin-bottom: 8px;">📅 후속 조치</h5>
-        <p style="margin-left: 16px;">X-ray 촬영 후 30분 뒤 재진료</p>
+      <div style="background: white; border-radius: 12px; overflow: hidden; border: 1px solid var(--border-color);">
+        <!-- 헤더 -->
+        <div style="background: linear-gradient(135deg, #A855F7 0%, #3B82F6 100%); padding: 16px 20px; display: flex; align-items: center; gap: 12px;">
+          <div style="width: 36px; height: 36px; background: white; border-radius: 8px; display: flex; align-items: center; justify-content: center;">
+            <span style="font-size: 20px;">📋</span>
+          </div>
+          <h3 style="color: white; font-size: 20px; font-weight: 700; margin: 0;">진료록</h3>
+        </div>
+        
+        <!-- 주관적 정보 (Subject) -->
+        <div style="padding: 20px; border-bottom: 1px solid var(--border-color);">
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+            <span style="background: #7C3AED; color: white; padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: 600;">S</span>
+            <h4 style="margin: 0; color: #7C3AED; font-size: 16px; font-weight: 600;">주관적 정보 (Subject)</h4>
+          </div>
+          <div style="margin-left: 8px; color: var(--text-primary); line-height: 1.8; font-size: 15px;">
+            <p style="margin: 0;">2주 전부터 오른쪽 무릎 통증과 아침 조조 강직 발생.</p>
+            <p style="margin: 8px 0 0 0;">계단 오르내릴 때 통증 심화, 앉았다 일어날 때 뚝뚝 소리 발생.</p>
+            <p style="margin: 8px 0 0 0;">최근 등산 후 증상 악화됨.</p>
+          </div>
+        </div>
+        
+        <!-- 객관적 정보 (Objective) -->
+        <div style="padding: 20px; border-bottom: 1px solid var(--border-color);">
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+            <span style="background: #3B82F6; color: white; padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: 600;">O</span>
+            <h4 style="margin: 0; color: #3B82F6; font-size: 16px; font-weight: 600;">객관적 정보 (Objective)</h4>
+          </div>
+          <div style="margin-left: 8px; color: var(--text-primary); line-height: 1.8; font-size: 15px;">
+            <p style="margin: 0;">오른쪽 무릎 관절 주변 압통 확인.</p>
+            <p style="margin: 8px 0 0 0;">무릎 부종 및 염증 소견.</p>
+            <p style="margin: 8px 0 0 0;">X-ray 검사 필요.</p>
+          </div>
+        </div>
+        
+        <!-- 소견 (Assessment) -->
+        <div style="padding: 20px; border-bottom: 1px solid var(--border-color);">
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+            <span style="background: #10B981; color: white; padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: 600;">A</span>
+            <h4 style="margin: 0; color: #10B981; font-size: 16px; font-weight: 600;">소견 (Assessment)</h4>
+          </div>
+          <div style="margin-left: 8px; color: var(--text-primary); line-height: 1.8; font-size: 15px;">
+            <p style="margin: 0; font-weight: 500;">퇴행성 관절염 초기 또는 슬개건염 의심.</p>
+            <p style="margin: 8px 0 0 0;">연골 상태 확인 필요.</p>
+          </div>
+        </div>
+        
+        <!-- 처방 (Plan) -->
+        <div style="padding: 20px;">
+          <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+            <span style="background: #F59E0B; color: white; padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: 600;">P</span>
+            <h4 style="margin: 0; color: #F59E0B; font-size: 16px; font-weight: 600;">처방 (Plan)</h4>
+          </div>
+          <div style="margin-left: 8px; color: var(--text-primary); line-height: 1.8; font-size: 15px;">
+            <p style="margin: 0;"><strong>1. 약물치료:</strong> 소염제 처방 (1주일)</p>
+            <p style="margin: 8px 0 0 0;"><strong>2. 물리치료:</strong> 주 2-3회, 2-3주간 시행</p>
+            <p style="margin: 8px 0 0 0;"><strong>3. 생활수칙:</strong> 등산 자제, 허벅지/햄스트링 스트레칭 권장</p>
+            <p style="margin: 8px 0 0 0;"><strong>4. 추적검사:</strong> X-ray 촬영 후 재진료</p>
+          </div>
+        </div>
       </div>
     `)
-    setKeywords(['무릎통증', '관절염', '물리치료', 'X-ray', '소염제', '스트레칭'])
-    addToast('요약이 생성되었습니다', 'success')
+    setKeywords(['무릎통증', '퇴행성관절염', '슬개건염', '소염제', '물리치료', 'X-ray'])
+    addToast('진료록이 생성되었습니다', 'success')
   }
 
   // Context menu
@@ -733,8 +751,8 @@ export default function DashboardPage() {
                   className={`editor-tab ${currentTab === 'summary' ? 'active' : ''}`}
                   onClick={() => setCurrentTab('summary')}
                 >
-                  <i className="fas fa-file-alt"></i>
-                  <span>요약</span>
+                  <i className="fas fa-file-medical"></i>
+                  <span>진료록</span>
                 </button>
               </div>
               <div className="editor-actions">
@@ -959,28 +977,30 @@ export default function DashboardPage() {
             <div className={`editor-content ${currentTab === 'summary' ? 'active' : ''}`}>
               <div className="summary-section">
                 <div className="summary-header">
-                  <h3>AI 요약</h3>
+                  <h3>진료록 (SOAP)</h3>
                   <button className="generate-summary-btn" onClick={generateSummary}>
-                    <i className="fas fa-magic"></i>
-                    <span>요약 생성</span>
+                    <i className="fas fa-file-medical"></i>
+                    <span>진료록 생성</span>
                   </button>
                 </div>
-                <div className="summary-content">
+                <div className="summary-content" style={{ background: 'var(--secondary-color)', padding: summaryContent ? 20 : 40 }}>
                   {summaryContent ? (
                     <div 
-                      style={{ textAlign: 'left', color: 'var(--text-primary)', lineHeight: 1.8 }}
+                      style={{ textAlign: 'left' }}
                       dangerouslySetInnerHTML={{ __html: summaryContent }}
                     />
                   ) : (
                     <div className="summary-placeholder">
-                      <i className="fas fa-file-alt"></i>
-                      <p>녹음 내용을 AI가 자동으로 요약해드립니다.</p>
-                      <p className="summary-hint">요약 생성 버튼을 클릭하세요.</p>
+                      <i className="fas fa-file-medical" style={{ fontSize: 64, marginBottom: 16, opacity: 0.3 }}></i>
+                      <p>녹음 내용을 바탕으로 SOAP 형식의 진료록을 생성합니다.</p>
+                      <p className="summary-hint" style={{ marginTop: 8 }}>
+                        <strong>S</strong>ubject(주관적 정보) · <strong>O</strong>bjective(객관적 정보) · <strong>A</strong>ssessment(소견) · <strong>P</strong>lan(처방)
+                      </p>
                     </div>
                   )}
                 </div>
                 <div className="summary-keywords">
-                  <h4>키워드</h4>
+                  <h4>주요 키워드</h4>
                   <div className="keyword-list">
                     {keywords.length > 0 ? (
                       keywords.map((keyword, idx) => (
@@ -988,7 +1008,7 @@ export default function DashboardPage() {
                       ))
                     ) : (
                       <span style={{ color: 'var(--text-secondary)', fontSize: 14 }}>
-                        요약 생성 후 키워드가 표시됩니다
+                        진료록 생성 후 키워드가 표시됩니다
                       </span>
                     )}
                   </div>
