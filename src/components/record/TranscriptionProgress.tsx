@@ -3,7 +3,7 @@
 import { useEffect } from 'react'
 import { Loader2, CheckCircle, XCircle, Clock } from 'lucide-react'
 import { cn } from '@/lib/utils'
-import { useJob } from '@/queries/jobs'
+import { useJob, type TranscriptionJob } from '@/queries/jobs'
 
 interface TranscriptionProgressProps {
   jobId: string
@@ -24,14 +24,16 @@ export function TranscriptionProgress({
     },
   })
 
+  const typedJob = job as TranscriptionJob | null | undefined
+
   useEffect(() => {
-    if (job?.status === 'SUCCEEDED' && job.result) {
-      onComplete?.(job.result)
+    if (typedJob?.status === 'SUCCEEDED' && typedJob.result) {
+      onComplete?.(typedJob.result)
     }
-    if (job?.status === 'FAILED') {
-      onError?.(job.error || '전사에 실패했습니다')
+    if (typedJob?.status === 'FAILED') {
+      onError?.(typedJob.error || '전사에 실패했습니다')
     }
-  }, [job?.status, job?.result, job?.error, onComplete, onError])
+  }, [typedJob?.status, typedJob?.result, typedJob?.error, onComplete, onError])
 
   const statusConfig = {
     PENDING: {
@@ -60,7 +62,7 @@ export function TranscriptionProgress({
     },
   }
 
-  const status = job?.status || 'PENDING'
+  const status = typedJob?.status || 'PENDING'
   const config = statusConfig[status]
   const Icon = config.icon
 
@@ -81,8 +83,8 @@ export function TranscriptionProgress({
               음성을 텍스트로 변환하고 있습니다...
             </p>
           )}
-          {status === 'FAILED' && job?.error && (
-            <p className="text-sm text-red-600 mt-1">{job.error}</p>
+          {status === 'FAILED' && typedJob?.error && (
+            <p className="text-sm text-red-600 mt-1">{typedJob.error}</p>
           )}
         </div>
       </div>

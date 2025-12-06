@@ -13,8 +13,13 @@ export interface TranscriptionJob {
   updatedAt: string
 }
 
-export function useJob(id: string | null, options?: { refetchInterval?: number | false }) {
-  return useQuery({
+export function useJob(
+  id: string | null,
+  options?: {
+    refetchInterval?: number | false | ((data: TranscriptionJob | undefined) => number | false | undefined)
+  }
+) {
+  return useQuery<TranscriptionJob | null>({
     queryKey: ['job', id],
     queryFn: async () => {
       if (!id) return null

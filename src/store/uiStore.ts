@@ -10,6 +10,7 @@ interface Toast {
 interface UIState {
   // Sidebar
   sidebarCollapsed: boolean
+  sidebarOpen: boolean
   
   // Search
   searchQuery: string
@@ -36,6 +37,7 @@ interface UIState {
   // Actions
   toggleSidebar: () => void
   setSidebarCollapsed: (collapsed: boolean) => void
+  setSidebarOpen: (open: boolean) => void
   setSearchQuery: (query: string) => void
   setTheme: (theme: 'light' | 'dark') => void
   addToast: (message: string, type: Toast['type']) => void
@@ -53,6 +55,7 @@ export const useUIStore = create<UIState>()(
   persist(
     (set) => ({
       sidebarCollapsed: false,
+      sidebarOpen: false,
       searchQuery: '',
       theme: 'light',
       toastQueue: [],
@@ -66,6 +69,7 @@ export const useUIStore = create<UIState>()(
 
       toggleSidebar: () => set((state) => ({ sidebarCollapsed: !state.sidebarCollapsed })),
       setSidebarCollapsed: (collapsed) => set({ sidebarCollapsed: collapsed }),
+      setSidebarOpen: (open) => set({ sidebarOpen: open }),
       setSearchQuery: (query) => set({ searchQuery: query }),
       setTheme: (theme) => set({ theme }),
       addToast: (message, type) =>
